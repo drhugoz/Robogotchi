@@ -29,12 +29,14 @@ SOURCES += \
         controller.cpp \
         facade.cpp \
         main.cpp \
+        model.cpp \
         widget.cpp
 
 HEADERS += \
         command.h \
         controller.h \
         facade.h \
+        model.h \
         widget.h
 
 # Default rules for deployment.
