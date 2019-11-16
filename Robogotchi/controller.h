@@ -1,19 +1,22 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-//class scene;
-//class robot;
+#include <QWidget>
+#include "widget.h"
+#include "model.h"
+#include "painter.h"
 
-class controller {
+class controller
+{
 public:
-    static controller* create() { return new controller(); }
-    controller() = default;
-    controller(const controller&) = delete;
-    ~controller() = default;
+    controller();
+    ~controller();
 
+    Widget* w;
 private:
-    //scene _scene;
-    //robot _robot;
+    QGraphicsScene* my_scene;
+    Model* my_model;
+    Painter* my_painter;
 };
 
 #endif // CONTROLLER_H

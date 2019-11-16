@@ -25,8 +25,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>680</x>
-     <y>240</y>
+     <x>710</x>
+     <y>290</y>
      <width>80</width>
      <height>24</height>
     </rect>
@@ -47,6 +47,19 @@ border-color: rgb(0, 255, 0);</string>
    </property>
    <property name="text">
     <string>i am oook</string>
+   </property>
+  </widget>
+  <widget class="QGraphicsView" name="graphicsView">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>681</width>
+     <height>601</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);</string>
    </property>
   </widget>
  </widget>

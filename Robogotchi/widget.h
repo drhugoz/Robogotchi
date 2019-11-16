@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QGraphicsScene>
 
 namespace Ui {
 class Widget;
@@ -14,9 +15,11 @@ class Widget : public QWidget
 public:
     explicit Widget(QWidget *parent = nullptr);
     ~Widget();
+    void setScene(QGraphicsScene* input_scene);
 
 private:
     Ui::Widget *ui;
+    QGraphicsScene* my_scene;
 };
 
 #endif // WIDGET_H

@@ -25,18 +25,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        command.cpp \
         controller.cpp \
-        facade.cpp \
         main.cpp \
         model.cpp \
+        painter.cpp \
         widget.cpp
 
 HEADERS += \
-        command.h \
         controller.h \
-        facade.h \
         model.h \
+        painter.h \
         widget.h
 
 # Default rules for deployment.
