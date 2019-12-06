@@ -5,12 +5,34 @@
 using std::vector;
 
 #define HEIGHT 50
+#define SCALE 10
+
+#define HEAD 0
+#define MOUTH 1
+#define L_EYE 2
+#define R_EYE 3
+#define L_EAR 4
+#define R_EAR 5
+#define L_HORN 6
+#define R_HORN 7
+#define BODY 8
+#define L_ARM 9
+#define R_ARM 10
+#define L_LEG 11
+#define R_LEG 12
 
 struct point {
-    float x;
-    float y;
-    float z;
-    point(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
+    double x;
+    double y;
+    double z;
+    point(double _x, double _y, double _z) : x(_x), y(_y), z(_z) {}
+    point operator*(int input) const {
+        point newP = point(x, y, z);
+        newP.x *= input;
+        newP.y *= input;
+        newP.z *= input;
+        return newP;
+    }
 };
 
 class Model {
@@ -21,61 +43,42 @@ public:
     ~Model() = default;
 
     vector<vector<point>> GiveMePoints() const;
+    vector<vector<point>> GiveMePoints3() const;
+    vector<point> GiveMeCenters() const;
 
 private:
     void _initialize_model();
     vector<point> _initialize_part(point, vector<int>);
+    vector<vector<point>> triangles;
 
-    point _head_center = point(0, 0, HEIGHT);
+    point _head_center = point(0, HEIGHT, 0);
     vector<int> _head_sizes = {10, 10, 10};
 
-    point _mouth_center = point(6, 0, HEIGHT - 3);
-    vector<int> _mouth_sizes = {2, 6, 2};
+    point _mouth_center = point(0, HEIGHT - 2, 6);
+    vector<int> _mouth_sizes = {6, 2, 2};
 
-    point _ear_center_left = point(0, -6, HEIGHT);
-    point _ear_center_right = point(0, 6, HEIGHT);
-    vector<int> _ear_sizes = {4, 2, 4};
+    point _ear_center_left = point(-6, HEIGHT, 0);
+    point _ear_center_right = point(6, HEIGHT, 0);
+    vector<int> _ear_sizes = {2, 4, 4};
 
-    point _eye_center_left = point(6, -2, HEIGHT + 2);
-    point _eye_center_right = point(6, 2, HEIGHT + 2);
+    point _eye_center_left = point(-2, HEIGHT + 2, 6);
+    point _eye_center_right = point(2, HEIGHT + 2, 6);
     vector<int> _eye_sizes = {2, 2, 2};
 
-    point _horn_center_left = point(0, -2, HEIGHT + 6);
-    point _horn_center_right = point(0, 2, HEIGHT + 6);
+    point _horn_center_left = point(-2, HEIGHT + 6, 0);
+    point _horn_center_right = point(2, HEIGHT + 6, 0);
     vector<int> _horn_sizes = {2, 2, 2};
 
-    /*vector<point> _head = all_coords_comb(_head_center.x + _head_sizes[0] / 2,
-                                                _head_center.y + _head_sizes[1] / 2,
-                                                _head_center.z + _head_sizes[2] / 2,
-                                                _head_center.z - _head_sizes[2] / 2);
-    vector<point> _mouth = all_coords_comb(_mouth_center.x + _mouth_sizes[0] / 2,
-                                                  _mouth_center.y + _mouth_sizes[1] / 2,
-                                                  _mouth_center.z + _mouth_sizes[2] / 2,
-                                                  _mouth_center.z - _mouth_sizes[2] / 2);
-    vector<point> _ear_left = all_coords_comb(_ear_center_left.x + _ear_sizes[0] / 2,
-                                                  _ear_center_left.y + _ear_sizes[1] / 2,
-                                                  _ear_center_left.z + _ear_sizes[2] / 2,
-                                                  _ear_center_left.z - _ear_sizes[2] / 2);
-    vector<point> _ear_right = all_coords_comb(_ear_center_right.x + _ear_sizes[0] / 2,
-                                                  _ear_center_right.y + _ear_sizes[1] / 2,
-                                                  _ear_center_right.z + _ear_sizes[2] / 2,
-                                                  _ear_center_right.z - _ear_sizes[2] / 2);
-    vector<point> _eye_left = all_coords_comb(_eye_center_left.x + _eye_sizes[0] / 2,
-                                                  _eye_center_left.y + _eye_sizes[1] / 2,
-                                                  _eye_center_left.z + _eye_sizes[2] / 2,
-                                                  _eye_center_left.z - _eye_sizes[2] / 2);
-    vector<point> _eye_right = all_coords_comb(_eye_center_right.x + _eye_sizes[0] / 2,
-                                                  _eye_center_right.y + _eye_sizes[1] / 2,
-                                                  _eye_center_right.z + _eye_sizes[2] / 2,
-                                                  _eye_center_right.z - _eye_sizes[2] / 2);
-    vector<point> _horn_left = all_coords_comb(_horn_center_left.x + _horn_sizes[0] / 2,
-                                                  _horn_center_left.y + _horn_sizes[1] / 2,
-                                                  _horn_center_left.z + _horn_sizes[2] / 2,
-                                                  _horn_center_left.z - _horn_sizes[2] / 2);
-    vector<point> _horn_right = all_coords_comb(_horn_center_right.x + _horn_sizes[0] / 2,
-                                                  _horn_center_right.y + _horn_sizes[1] / 2,
-                                                  _horn_center_right.z + _horn_sizes[2] / 2,
-                                                  _horn_center_right.z - _horn_sizes[2] / 2);*/
+    point _body_center = point(0, HEIGHT - 15, 0);
+    vector<int> _body_sizes = {16, 20, 6};
+
+    point _arm_center_left = point(-10, HEIGHT - 12, 0);
+    point _arm_center_right = point(10, HEIGHT - 12, 0);
+    vector<int> _arm_sizes = {4, 14, 6};
+
+    point _leg_center_left = point(-5, HEIGHT - 32, 0);
+    point _leg_center_right = point(5, HEIGHT - 32, 0);
+    vector<int> _leg_sizes = {6, 14, 6};
 
     vector<point> _head;
     vector<point> _mouth;
@@ -85,6 +88,12 @@ private:
     vector<point> _eye_right;
     vector<point> _horn_left;
     vector<point> _horn_right;
+
+    vector<point> _arm_left;
+    vector<point> _arm_right;
+    vector<point> _leg_left;
+    vector<point> _leg_right;
+    vector<point> _body;
 
 };
 

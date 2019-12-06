@@ -22,40 +22,13 @@
   <property name="styleSheet">
    <string notr="true">background-color: rgb(40, 40, 40);</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>710</x>
-     <y>290</y>
-     <width>80</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="mouseTracking">
-    <bool>false</bool>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(254, 251, 255);
-border-color: rgb(0, 0, 0);
-gridline-color: rgb(255, 0, 0);
-border-top-color: rgb(0, 0, 0);
-border-color: rgb(0, 255, 0);</string>
-   </property>
-   <property name="text">
-    <string>i am oook</string>
-   </property>
-  </widget>
   <widget class="QGraphicsView" name="graphicsView">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>681</width>
-     <height>601</height>
+     <width>800</width>
+     <height>600</height>
     </rect>
    </property>
    <property name="styleSheet">

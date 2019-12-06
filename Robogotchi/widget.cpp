@@ -13,6 +13,6 @@ Widget::~Widget()
     delete ui;
 }
 
-void Widget::setScene(QGraphicsScene* input_scene) {
+void Widget::setScene(Scene* input_scene) {
     ui->graphicsView->setScene(input_scene);
 }

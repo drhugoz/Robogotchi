@@ -29,12 +29,16 @@ SOURCES += \
         main.cpp \
         model.cpp \
         painter.cpp \
+        scene.cpp \
+        transform.cpp \
         widget.cpp
 
 HEADERS += \
         controller.h \
         model.h \
         painter.h \
+        scene.h \
+        transform.h \
         widget.h
 
 # Default rules for deployment.
