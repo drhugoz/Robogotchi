@@ -5,21 +5,24 @@ vector<vector<point>> Model::GiveMePoints3() const {
       vector<vector<point>> triangles;
      for (auto part: squares) {
         vector<point> _triangle;
-        _triangle.push_back(part[0]);
+
+        // front
+        _triangle.push_back(part[2]);
         _triangle.push_back(part[1]);
-        _triangle.push_back(part[2]);
+        _triangle.push_back(part[0]);
         triangles.push_back(_triangle);
         _triangle.clear();
 
-        _triangle.push_back(part[0]);
         _triangle.push_back(part[2]);
+        _triangle.push_back(part[0]);
         _triangle.push_back(part[3]);
         triangles.push_back(_triangle);
         _triangle.clear();
 
+        ////// top
         _triangle.push_back(part[0]);
-        _triangle.push_back(part[3]);
         _triangle.push_back(part[4]);
+        _triangle.push_back(part[3]);
         triangles.push_back(_triangle);
         _triangle.clear();
 
@@ -29,32 +32,35 @@ vector<vector<point>> Model::GiveMePoints3() const {
         triangles.push_back(_triangle);
         _triangle.clear();
 
-
-        _triangle.push_back(part[4]);
+        //////// back
         _triangle.push_back(part[5]);
         _triangle.push_back(part[6]);
+        _triangle.push_back(part[4]);
         triangles.push_back(_triangle);
         _triangle.clear();
 
-        _triangle.push_back(part[4]);
         _triangle.push_back(part[6]);
         _triangle.push_back(part[7]);
+        _triangle.push_back(part[4]);
         triangles.push_back(_triangle);
         _triangle.clear();
 
 
+        ////////////// bot
         _triangle.push_back(part[1]);
-        _triangle.push_back(part[6]);
         _triangle.push_back(part[2]);
+        _triangle.push_back(part[6]);
         triangles.push_back(_triangle);
         _triangle.clear();
 
+        _triangle.push_back(part[5]);
         _triangle.push_back(part[1]);
         _triangle.push_back(part[6]);
-        _triangle.push_back(part[5]);
         triangles.push_back(_triangle);
         _triangle.clear();
 
+
+        /////////////right
         _triangle.push_back(part[0]);
         _triangle.push_back(part[1]);
         _triangle.push_back(part[4]);
@@ -62,20 +68,22 @@ vector<vector<point>> Model::GiveMePoints3() const {
         _triangle.clear();
 
         _triangle.push_back(part[1]);
-        _triangle.push_back(part[4]);
         _triangle.push_back(part[5]);
+        _triangle.push_back(part[4]);
         triangles.push_back(_triangle);
         _triangle.clear();
 
+
+        ///////////left
         _triangle.push_back(part[2]);
         _triangle.push_back(part[3]);
-        _triangle.push_back(part[7]);
+        _triangle.push_back(part[6]);
         triangles.push_back(_triangle);
         _triangle.clear();
 
-        _triangle.push_back(part[2]);
-        _triangle.push_back(part[6]);
+        _triangle.push_back(part[3]);
         _triangle.push_back(part[7]);
+        _triangle.push_back(part[6]);
         triangles.push_back(_triangle);
         _triangle.clear();
      }
@@ -98,6 +106,9 @@ vector<vector<point>> Model::GiveMePoints() const {
     result.push_back(_arm_right);
     result.push_back(_leg_left);
     result.push_back(_leg_right);
+
+    vector<point> wall = vector<point>{point(W, H, 900), point(W, 0, 900), point(0, 0, 900), point(0, H, 900)};
+    //result.push_back(wall);
 
 
     return result;
@@ -150,5 +161,9 @@ vector<point> Model::GiveMeCenters() const {
     center.push_back(_leg_center_right*SCALE);
 
     return center;
+}
+
+vector<QColor> Model::GiveMeColors() const {
+    return colors;
 }
 

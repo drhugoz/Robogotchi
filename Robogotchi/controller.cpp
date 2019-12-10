@@ -25,19 +25,21 @@ controller::~controller()
 }
 
 void controller::startModel() {
-    vector<double> param = {0, 3.3, 0};
+    vector<double> param = {0, 3.1, 0};
     vector<vector<point>> points = my_model->GiveMePoints3();
+    vector<QColor> colors = my_model->GiveMeColors();
     my_scene->SetModel(points);
-    my_painter->draw(my_transform->RotatePoints(points, param));
+    my_painter->draw(my_transform->RotatePoints(points, param), my_scene->GiveLight(), colors);
 }
 
 void controller::rotateModel(vector<double> param) {
     vector<vector<point>> points = my_scene->GiveModel();
-    my_painter->draw(my_transform->RotatePoints(points, param));
+    vector<QColor> colors = my_model->GiveMeColors();
+    my_scene->SetModel(points);
+    my_painter->draw(my_transform->RotatePoints(points, param), my_scene->GiveLight(), colors);
 }
 
 void controller::partMove(int partNum, bool s) {
-    qDebug() << partNum;
     vector<vector<point>> model = my_scene->GiveModel();
     point center = my_model->GiveMeCenters()[partNum];
     vector<double> param = changeByPart(partNum, center, s);
@@ -49,12 +51,15 @@ void controller::partMove(int partNum, bool s) {
         model[partNum * 12 + i] = newPart;
     }
     my_scene->SetModel(model);
+    vector<QColor> colors = my_model->GiveMeColors();
     if (partNum == 0) {
-        for (int i = 1; i <= 7; ++i) partMove(i, s);
-        my_painter->draw(my_transform->RotatePoints(model, my_scene->GiveAngles()));
-    } else if (partNum >= 8)
-        my_painter->draw(my_transform->RotatePoints(model, my_scene->GiveAngles()));
-
+        for (int i = 1; i <= 7; ++i) {
+            partMove(i, s);
+        }
+        my_painter->draw(my_transform->RotatePoints(model, my_scene->GiveAngles()), my_scene->GiveLight(), colors);
+    } else if (partNum >= 8) {
+        my_painter->draw(my_transform->RotatePoints(model, my_scene->GiveAngles()), my_scene->GiveLight(), colors);
+    }
 }
 
 vector<double> controller::changeByPart(int partNum, point& center, bool s) {
@@ -68,11 +73,11 @@ vector<double> controller::changeByPart(int partNum, point& center, bool s) {
         if (!s)
             return vector<double>{1.9, 0, 0};
         return vector<double>{-1.9, 0, 0};
-    } else if (partNum >= HEAD && partNum <= 7) {
+    } else {//if (partNum >= HEAD && partNum <= 7) {
         center = my_model->GiveMeCenters()[0];
         if (!s)
             return vector<double>{0, 0.1, 0};
         return vector<double>{0, 0.1, 0};
     }
-    return vector<double>{};
 }
+

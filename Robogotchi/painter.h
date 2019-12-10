@@ -5,6 +5,7 @@
 #include <model.h>
 #include <transform.h>
 #include <scene.h>
+#include <mathvector.h>
 
 class Painter
 {
@@ -14,13 +15,16 @@ public:
     void setScene(Scene*);
 
     void drawOld(vector<vector<point>>);
-    void draw(vector<vector<point>> result);
-
+    void draw(vector<vector<point>> result, light, vector<QColor>);
+    vector<vector<double>> clearPIX(int We, int Hi, int maxVal);
+    vector<vector<QColor>> clearCOL(int We, int Hi, QColor col);
 
 private:
     Scene* curScene;
-    vector<vector<double>> clearPIX(int We, int Hi, int maxVal);
-    QImage createZ(vector<vector<point>>);
+    QImage createZ(vector<vector<point>>, light, vector<QColor>, vector<vector<bool>> shad = vector<vector<bool>>{});
+    QColor createColor(vector<point>, QColor, light);
+    QColor createColorNew(MathVector n, point p, QColor input, light _light);
+    vector<vector<bool>> calculateShadow(vector<vector<point>> input, light);
 };
 
 #endif // PAINTER_H

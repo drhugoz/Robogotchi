@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <scene.h>
+#include <QMenu>
+#include <QMenuBar>
 
 namespace Ui {
 class Widget;
@@ -17,6 +19,7 @@ public:
     explicit Widget(QWidget *parent = nullptr);
     ~Widget();
     void setScene(Scene* input_scene);
+    void contextMenuEvent(QContextMenuEvent *event);
 
 private:
     Ui::Widget *ui;

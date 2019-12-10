@@ -8,6 +8,13 @@ Widget::Widget(QWidget *parent) :
     ui->setupUi(this);
 }
 
+void Widget::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu menu(this);
+    menu.addAction("cutAct");
+    menu.exec(event->globalPos());
+}
+
 Widget::~Widget()
 {
     delete ui;
@@ -15,4 +22,6 @@ Widget::~Widget()
 
 void Widget::setScene(Scene* input_scene) {
     ui->graphicsView->setScene(input_scene);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }

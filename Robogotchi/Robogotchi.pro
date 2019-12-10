@@ -27,6 +27,7 @@ CONFIG += c++11
 SOURCES += \
         controller.cpp \
         main.cpp \
+        mathvector.cpp \
         model.cpp \
         painter.cpp \
         scene.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
 
 HEADERS += \
         controller.h \
+        mathvector.h \
         model.h \
         painter.h \
         scene.h \
