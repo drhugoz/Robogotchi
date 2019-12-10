@@ -153,8 +153,8 @@ void Painter::draw(vector<vector<point>> input, light _light, vector<QColor> col
         result = createZ(input, _light, colors, shadows);
     } else {
         result = createZ(input, _light, colors);
-        curScene->addPixmap(QPixmap::fromImage(result));
     }
+    result = drawLight(result, _light);
     curScene->addPixmap(QPixmap::fromImage(result));
 }
 
@@ -347,5 +347,50 @@ vector<vector<bool>> Painter::calculateShadow(vector<vector<point>> input, light
         }
     }
     return shadBool;
+}
+
+QImage Painter::drawLight(QImage img, light _light) {
+    QColor col = _light.color;
+    if (_light.color == "black")
+        col = "yellow";
+    int r,g,b;
+    col.getRgb(&r, &g, &b);
+    r = _light.intens*r;
+    g = _light.intens*g;
+    b = _light.intens*b;
+    if (r > 255) r = 255;
+    if (g > 255) g = 255;
+    if (b > 255) b = 255;
+    if (r < 0) r = 0;
+    if (g < 0) g = 0;
+    if (b < 0) b = 0;
+    col = QColor(r, g, b);
+    double xp = _light.param[0], yp = _light.param[1];
+    if (xp > 0 && yp > 0) {
+        for (int x = 0; x <= LIGHTRAD; ++x) {
+            for (int y = 0; y <= sqrt(LIGHTRAD * LIGHTRAD - x*x); ++y) {
+                    img.setPixelColor(x, H - 1 - y, col);
+            }
+        }
+    } else if (xp > 0 && yp < 0) {
+        for (int x = 0; x <= LIGHTRAD; ++x) {
+            for (int y = 0; y <= sqrt(LIGHTRAD * LIGHTRAD - x*x); ++y) {
+                    img.setPixelColor(W - 1 - x, H - 1 - y, col);
+            }
+        }
+    } else if (xp < 0 && yp > 0) {
+        for (int x = 0; x <= LIGHTRAD; ++x) {
+            for (int y = 0; y <= sqrt(LIGHTRAD * LIGHTRAD - x*x); ++y) {
+                    img.setPixelColor(x, y, col);
+            }
+        }
+    } else if (xp < 0 && yp < 0) {
+        for (int x = 0; x <= LIGHTRAD; ++x) {
+            for (int y = 0; y <= sqrt(LIGHTRAD * LIGHTRAD - x*x); ++y) {
+                    img.setPixelColor(W - 1 - x, y, col);
+            }
+        }
+    }
+    return img;
 }
 

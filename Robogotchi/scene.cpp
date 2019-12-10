@@ -1,7 +1,7 @@
 #include "scene.h"
 #include <QDebug>
 
-Scene::Scene() : shadow(0), curLight(0), curLightColor(0), intens(0.7), x_a(0), y_a(3.1), z_a(0), leftHand(false), rightHand(false), leftLeg(false), rightLeg(false),
+Scene::Scene() : shadow(0), curLight(0), curLightColor(0), intens(1), x_a(0), y_a(3.1), z_a(0), leftHand(false), rightHand(false), leftLeg(false), rightLeg(false),
     head(false)
 {
     point view = point(0, HEIGHT * SCALE, 0);

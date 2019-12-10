@@ -32,10 +32,10 @@ private:
                              point(400, HEIGHT * SCALE * 5, 500),
                              point(800, HEIGHT * SCALE * 5, 0),
                             point(400, -HEIGHT * SCALE * 5, 0)};*/
-    vector<vector<double>> _light_param = {{0.1, 0.6, 0},
-                                                 {0.1, -0.6, 0},
-                                                 {-0.1, 0.6, 0},
-                                                 {-0.1, -0.6, 0}};
+    vector<vector<double>> _light_param = {{0.2, 0.6, 0},
+                                                 {0.2, -0.6, 0},
+                                                 {-0.2, 0.6, 0},
+                                                 {-0.2, -0.6, 0}};
     int curLight;
 
     vector<QColor> _light_colors = {QColor(0, 0, 0),

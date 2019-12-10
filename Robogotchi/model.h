@@ -12,6 +12,8 @@ using std::vector;
 #define H 600
 #define MAXZ 1000
 
+#define LIGHTRAD 30
+
 #define HEAD 0
 #define MOUTH 1
 #define L_EYE 2
@@ -25,6 +27,7 @@ using std::vector;
 #define R_ARM 10
 #define L_LEG 11
 #define R_LEG 12
+
 
 struct point {
     double x;
