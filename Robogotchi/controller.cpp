@@ -1,5 +1,9 @@
 #include "controller.h"
 #include <QDebug>
+#include <stdio.h>
+#include <unistd.h>
+#include <chrono>
+#include <thread>
 
 controller::controller() {
     my_scene = new Scene;
@@ -13,6 +17,7 @@ controller::controller() {
 
     QObject::connect(my_scene, SIGNAL(rotateModel(vector<double>)), this, SLOT(rotateModel(vector<double>)));
     QObject::connect(my_scene, SIGNAL(partMove(int, bool)), this, SLOT(partMove(int, bool)));
+    QObject::connect(my_scene, SIGNAL(jumpMove(vector<double>)), this, SLOT(jumpMove(vector<double>)));
 }
 
 controller::~controller()
@@ -24,22 +29,22 @@ controller::~controller()
     delete my_scene;
 }
 
-void controller::startModel() {
-    vector<double> param = {0, 3.1, 0};
-    vector<vector<point>> points = my_model->GiveMePoints3();
-    vector<QColor> colors = my_model->GiveMeColors();
+void controller::startModel() const {
+    const vector<double> param = {0, 3.1, 0};
+    const vector<vector<point>> points = my_model->GiveMePoints3();
+    const vector<QColor> colors = my_model->GiveMeColors();
     my_scene->SetModel(points);
     my_painter->draw(my_transform->RotatePoints(points, param), my_scene->GiveLight(), colors);
 }
 
-void controller::rotateModel(vector<double> param) {
-    vector<vector<point>> points = my_scene->GiveModel();
-    vector<QColor> colors = my_model->GiveMeColors();
+void controller::rotateModel(const vector<double>& param) const {
+    const vector<vector<point>> points = my_scene->GiveModel();
+    const vector<QColor> colors = my_model->GiveMeColors();
     my_scene->SetModel(points);
     my_painter->draw(my_transform->RotatePoints(points, param), my_scene->GiveLight(), colors);
 }
 
-void controller::partMove(int partNum, bool s) {
+void controller::partMove(const int& partNum, const bool& s) const {
     vector<vector<point>> model = my_scene->GiveModel();
     point center = my_model->GiveMeCenters()[partNum];
     vector<double> param = changeByPart(partNum, center, s);
@@ -62,7 +67,7 @@ void controller::partMove(int partNum, bool s) {
     }
 }
 
-vector<double> controller::changeByPart(int partNum, point& center, bool s) {
+vector<double> controller::changeByPart(const int& partNum, point& center, const bool& s) const {
     if (partNum == L_ARM || partNum == R_ARM) { // hands
         center.y = center.y + 3 * SCALE;
         if (!s)
@@ -73,7 +78,7 @@ vector<double> controller::changeByPart(int partNum, point& center, bool s) {
         if (!s)
             return vector<double>{1.9, 0, 0};
         return vector<double>{-1.9, 0, 0};
-    } else {//if (partNum >= HEAD && partNum <= 7) {
+    } else {
         center = my_model->GiveMeCenters()[0];
         if (!s)
             return vector<double>{0, 0.1, 0};
@@ -81,3 +86,23 @@ vector<double> controller::changeByPart(int partNum, point& center, bool s) {
     }
 }
 
+void controller::jumpMove(const vector<double>& param) const {
+    using namespace std::this_thread; // sleep_for, sleep_until
+    using namespace std::chrono; // nanoseconds, system_clock, seconds
+    vector<vector<point>> points = my_model->GiveMePoints3();
+    vector<QColor> colors = my_model->GiveMeColors();
+    for (int i = 0; i < 10; ++i) {
+        points = my_transform->jump(points, 2);
+        my_scene->SetModel(points);
+        my_painter->draw(my_transform->RotatePoints(points, param), my_scene->GiveLight(), colors);
+        sleep_for(nanoseconds(10));
+        sleep_until(system_clock::now() + milliseconds(100));
+    }
+    for (int i = 0; i < 10; ++i) {
+        points = my_transform->jump(points, -1);
+        my_scene->SetModel(points);
+        my_painter->draw(my_transform->RotatePoints(points, param), my_scene->GiveLight(), colors);
+        sleep_for(nanoseconds(10));
+        sleep_until(system_clock::now() + milliseconds(100));
+    }
+}

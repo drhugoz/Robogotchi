@@ -4,7 +4,7 @@
 Scene::Scene() : shadow(0), curLight(0), curLightColor(0), intens(1), x_a(0), y_a(3.1), z_a(0), leftHand(false), rightHand(false), leftLeg(false), rightLeg(false),
     head(false)
 {
-    point view = point(0, HEIGHT * SCALE, 0);
+    const point view = point(0, HEIGHT * SCALE, 0);
     Transform trans;
     for (int i = 0; i < int(_light_param.size()); ++i) {
         _light_places.push_back(trans.RotatePoint(view, _light_param[i]));
@@ -15,11 +15,11 @@ light Scene::GiveLight() const {
     return light(_light_places[curLight], intens, _light_colors[curLightColor], _light_param[curLight], shadow);
 }
 
-void Scene::SetModel(vector<vector<point>> input) {
+void Scene::SetModel(const vector<vector<point>>& input) {
     model = input;
 }
 
-vector<vector<point>> Scene::GiveModel() {
+vector<vector<point>> Scene::GiveModel() const {
     return model;
 }
 
@@ -121,5 +121,8 @@ void Scene::keyPressEvent(QKeyEvent *event) {
         shadow = !shadow;
         emit rotateModel(vector<double>{x_a, y_a, z_a});
     }
+    /*if (event->key() == Qt::Key_J) {
+        emit jumpMove(vector<double>{x_a, y_a, z_a});
+    }*/
 }
 

@@ -16,19 +16,20 @@ public:
     controller();
     ~controller();
 
-    void startModel();
+    void startModel() const;
 
     Widget* w;
 
 private slots:
-    void rotateModel(vector<double>);
-    void partMove(int, bool);
+    void rotateModel(const vector<double>&) const;
+    void partMove(const int&, const bool&) const;
+    void jumpMove(const vector<double>&) const;
 private:
     Scene* my_scene;
     Model* my_model;
     Painter* my_painter;
     Transform* my_transform;
-    vector<double> changeByPart(int, point&, bool);
+    vector<double> changeByPart(const int&, point&, const bool&) const;
 };
 
 #endif // CONTROLLER_H

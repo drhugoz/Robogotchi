@@ -17,21 +17,19 @@ public:
     Scene();
     ~Scene() {}
 
-    void SetModel(vector<vector<point>>);
-    vector<vector<point>> GiveModel();
-    vector<double> GiveAngles() {return vector<double>{x_a, y_a, z_a};}
+    void SetModel(const vector<vector<point>>&);
+    vector<vector<point>> GiveModel() const;
+    vector<double> GiveAngles() const {return vector<double>{x_a, y_a, z_a};}
     light GiveLight() const;
 
 signals:
     void rotateModel(vector<double>);
     void partMove(int, bool);
+    void jumpMove(vector<double>);
 
 private:
     bool shadow;
-    vector<point> _light_places; /* = {point(0, HEIGHT * SCALE * 5, -500),
-                             point(400, HEIGHT * SCALE * 5, 500),
-                             point(800, HEIGHT * SCALE * 5, 0),
-                            point(400, -HEIGHT * SCALE * 5, 0)};*/
+    vector<point> _light_places;
     vector<vector<double>> _light_param = {{0.2, 0.6, 0},
                                                  {0.2, -0.6, 0},
                                                  {-0.2, 0.6, 0},

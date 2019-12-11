@@ -14,19 +14,16 @@ public:
 
     void setScene(Scene*);
 
-    void drawOld(vector<vector<point>>);
-    void draw(vector<vector<point>> result, light, vector<QColor>);
-    vector<vector<double>> clearPIX(int We, int Hi, int maxVal);
-    vector<vector<QColor>> clearCOL(int We, int Hi, QColor col);
+    void draw(const vector<vector<point>>& result, const light&, const vector<QColor>&) const;
+    vector<vector<double>> clearPIX(const int& We, const int& Hi, const int& maxVal) const;
+    vector<vector<QColor>> clearCOL(const int& We, const int& Hi, const QColor& col) const;
 
 private:
     Scene* curScene;
-    QImage createZ(vector<vector<point>>, light, vector<QColor>, vector<vector<bool>> shad = vector<vector<bool>>{});
-    QColor createColor(vector<point>, QColor, light);
-    QColor createColorNew(MathVector n, point p, QColor input, light _light);
-    vector<vector<bool>> calculateShadow(vector<vector<point>> input, light);
-    vector<vector<double>> calculateShadowUpgrade(vector<vector<point>> input, light); //bad
-    QImage drawLight(QImage, light);
+    QImage createZ(const vector<vector<point>>& input, const light& _light, const vector<QColor>& colors, const vector<vector<bool>>& shadows = vector<vector<bool>>{}) const;
+    QColor createColor(vector<point>, QColor, light) const;
+    vector<vector<bool>> calculateShadow(const vector<vector<point>>& input, const light& _light) const;
+    QImage drawLight(QImage&, const light&) const;
 };
 
 #endif // PAINTER_H

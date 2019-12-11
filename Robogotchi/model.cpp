@@ -114,7 +114,7 @@ vector<vector<point>> Model::GiveMePoints() const {
     return result;
 }
 
-vector<point> Model::_initialize_part(point center, vector<int> sizes) {
+vector<point> Model::_initialize_part(const point& center, const vector<int>& sizes) const {
     vector<point> result;
     result.push_back(point(SCALE*(center.x + sizes[0]/2), SCALE*(center.y + sizes[1]/2), SCALE*(center.z + sizes[2]/2)));
     result.push_back(point(SCALE*(center.x + sizes[0]/2), SCALE*(center.y - sizes[1]/2), SCALE*(center.z + sizes[2]/2)));

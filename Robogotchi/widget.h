@@ -6,6 +6,7 @@
 #include <scene.h>
 #include <QMenu>
 #include <QMenuBar>
+#include <QMessageBox>
 
 namespace Ui {
 class Widget;
@@ -19,7 +20,9 @@ public:
     explicit Widget(QWidget *parent = nullptr);
     ~Widget();
     void setScene(Scene* input_scene);
-    void contextMenuEvent(QContextMenuEvent *event);
+
+private slots:
+    void on_infoButton_clicked();
 
 private:
     Ui::Widget *ui;

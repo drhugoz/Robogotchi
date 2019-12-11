@@ -28,7 +28,6 @@ using std::vector;
 #define L_LEG 11
 #define R_LEG 12
 
-
 struct point {
     double x;
     double y;
@@ -66,7 +65,7 @@ public:
 
 private:
     void _initialize_model();
-    vector<point> _initialize_part(point, vector<int>);
+    vector<point> _initialize_part(const point&, const vector<int>&) const;
     vector<vector<point>> triangles;
 
     vector<QColor> colors = {QColor(200, 200, 150), //head
