@@ -25,6 +25,7 @@ private:
     QColor createColor(vector<point>, QColor, light);
     QColor createColorNew(MathVector n, point p, QColor input, light _light);
     vector<vector<bool>> calculateShadow(vector<vector<point>> input, light);
+    vector<vector<double>> calculateShadowUpgrade(vector<vector<point>> input, light); //bad
     QImage drawLight(QImage, light);
 };
 

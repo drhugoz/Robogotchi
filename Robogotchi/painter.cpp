@@ -15,10 +15,7 @@ vector<vector<double>> Painter::clearPIX(int We, int Hi, int maxVal) {
     vector<vector<double>> pix;
     pix.resize(We);
     for (int i = 0; i < We; ++i) {
-        pix[i].resize(Hi);
-        for (int j = 0; j < Hi; ++j) {
-            pix[i][j] = maxVal;
-        }
+        pix[i].resize(Hi, maxVal);
     }
 
     return pix;
@@ -28,10 +25,7 @@ vector<vector<QColor>> Painter::clearCOL(int We, int Hi, QColor col) {
     vector<vector<QColor>> pix;
     pix.resize(We);
     for (int i = 0; i < We; ++i) {
-        pix[i].resize(Hi);
-        for (int j = 0; j < Hi; ++j) {
-            pix[i][j] = col;
-        }
+        pix[i].resize(Hi, col);
     }
 
     return pix;
@@ -118,7 +112,6 @@ QImage Painter::createZ(vector<vector<point>> input, light _light, vector<QColor
             }
         }
     }
-
     img.fill(QColor("white"));
     if (_light.shadow) {
         for (int x = 0; x < W; ++x) {
@@ -327,8 +320,6 @@ vector<vector<bool>> Painter::calculateShadow(vector<vector<point>> input, light
             }
         }
     }
-    QImage img = QImage(W, H, QImage::Format_RGB32);
-    img.fill("white");
     vector<vector<bool>> shadBool;
     shadBool.resize(W);
     for (int i = 0; i < W; ++i) {
@@ -347,6 +338,93 @@ vector<vector<bool>> Painter::calculateShadow(vector<vector<point>> input, light
         }
     }
     return shadBool;
+}
+
+vector<vector<double>> Painter::calculateShadowUpgrade(vector<vector<point>> input, light _light) {
+    vector<vector<double>> pix = clearPIX(W, H, MAXZ);
+    vector<vector<double>> shadow = clearPIX(W, H, MAXZ);
+    int ymax = 0, ymin = 0, ysc = 0, e1 = 0, e = 0;
+    for (auto part: input) {
+        int N = static_cast<int>(part.size());
+        for (int i = 0; i < N; ++i) {
+            part[i].x += W/2;
+            part[i].y += 30; //* 2;
+            //part[i].z += 400;
+        }
+        ymax = ymin = part[0].y;
+        if (ymax < part[1].y)
+            ymax = part[1].y;
+        else if (ymin > part[1].y)
+            ymin = part[1].y;
+
+        if (ymax < part[2].y)
+            ymax = part[2].y;
+        else if (ymin > part[2].y)
+            ymin = part[2].y;
+        ymin = ( ymin < 0 ) ? 0 : ymin;
+        ymax = ( ymax < H ) ? ymax : H;
+        int ne;
+        double x1 = 0, x2 = 0;
+        int xsc1 = 0, xsc2 = 0;
+        double z1 = 0, z2 = 0, tc = 0, z = 0;
+        ymin = floor(ymin);
+        ymax = ceil(ymax);
+        for (ysc = ymin; ysc <= ymax; ysc++) {
+            ne = 0;
+            for (int e = 0; e < 3; e++) {
+                e1 = e + 1;
+                if (e1 == 3)
+                    e1 = 0;
+                if (part[size_t(e)].y <= part[size_t(e1)].y) {
+                    if (part[size_t(e1)].y <= ysc || ysc <= part[size_t(e)].y ) continue;
+                } else if (part[size_t(e)].y >= part[size_t(e1)].y ) {
+                    if (part[size_t(e1)].y >= ysc || ysc >= part[size_t(e)].y ) continue;
+                } else continue;
+                tc = double(part[e].y - ysc) / (part[e].y - part[e1].y);
+                if (ne) {
+                    x2 = part[e].x + int (tc * (part[e1].x - part[e].x));
+                    z2 = part[e].z + tc * (part[e1].z - part[e].z );
+                } else {
+                    x1 = part[e].x + int(tc * (part[e1].x - part[e].x));
+                    z1 = part[e].z + tc * (part[e1].z - part[e].z);
+                    ne = 1;
+                }
+            }
+            if (x2 < x1) {
+                e = x1;
+                x1 = x2;
+                x2 = e;
+                tc = z1;
+                z1 = z2;
+                z2 = tc;
+            }
+            x1 = floor(x1);
+            x2 = ceil(x2);
+            if (x1 <= 0 || x2 >= W) continue;
+            xsc1 = ( x1 < 0 ) ? 0 : x1;
+            xsc2 = ( x2 < W ) ? x2 : W;
+            for (double xsc = xsc1; xsc <= xsc2; xsc++) {
+                tc = double(x1 - xsc) / (x1 - x2);
+                z = z1 + tc * ( z2 - z1 );
+                if (z < pix[xsc][ysc]) {
+                    pix[xsc][ysc] = z;
+                }
+            }
+        }
+    }
+    Transform tr;
+    point a(0,0,0);
+    for (int x = 0; x < W; ++x) {
+        for (int y = 0; y < H; ++y) {
+            if (pix[x][y] != MAXZ) {
+                a = point(x, y, pix[x][y] + 300);
+                a = tr.RotatePoint(a, _light.param);
+                if (a.x < 0 || a.x > 799 || a.y < 0 || a.y > 599) continue;
+                shadow[a.x][a.y] = a.z;
+            }
+        }
+    }
+    return shadow;
 }
 
 QImage Painter::drawLight(QImage img, light _light) {
